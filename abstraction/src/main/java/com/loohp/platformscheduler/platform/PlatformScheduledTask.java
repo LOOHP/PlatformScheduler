@@ -22,12 +22,14 @@ package com.loohp.platformscheduler.platform;
 
 import org.bukkit.plugin.Plugin;
 
-public interface PlatformScheduledTask {
+public interface PlatformScheduledTask<T> {
 
     boolean isCancelled();
 
     void cancel();
 
     Plugin getOwner();
+
+    T getHandle();
 
 }

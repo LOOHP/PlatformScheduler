@@ -45,6 +45,10 @@ public class ScheduledTask {
         return platformScheduledTask.getOwner();
     }
 
+    public PlatformScheduledTask getPlatform() {
+        return platformScheduledTask;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) return false;

@@ -26,7 +26,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Objects;
 
-public class BukkitScheduledTask implements PlatformScheduledTask {
+public class BukkitScheduledTask implements PlatformScheduledTask<BukkitTask> {
 
     private final BukkitTask task;
 
@@ -47,6 +47,11 @@ public class BukkitScheduledTask implements PlatformScheduledTask {
     @Override
     public Plugin getOwner() {
         return task.getOwner();
+    }
+
+    @Override
+    public BukkitTask getHandle() {
+        return task;
     }
 
     @Override

@@ -26,7 +26,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Objects;
 
-public class FoliaScheduledTask implements PlatformScheduledTask {
+public class FoliaScheduledTask implements PlatformScheduledTask<ScheduledTask> {
 
     private final ScheduledTask task;
 
@@ -47,6 +47,11 @@ public class FoliaScheduledTask implements PlatformScheduledTask {
     @Override
     public Plugin getOwner() {
         return task.getOwningPlugin();
+    }
+
+    @Override
+    public ScheduledTask getHandle() {
+        return task;
     }
 
     @Override

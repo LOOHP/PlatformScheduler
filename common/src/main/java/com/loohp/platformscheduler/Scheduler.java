@@ -64,6 +64,10 @@ public class Scheduler {
         throw new IllegalArgumentException("Unable to find suitable implementation of PlatformScheduler");
     }
 
+    public static PlatformScheduler getPlatform() {
+        return platformScheduler;
+    }
+
     public static void executeOrScheduleSync(Plugin plugin, Runnable task, Entity entity) {
         platformScheduler.executeOrScheduleSync(plugin, task, entity);
     }
