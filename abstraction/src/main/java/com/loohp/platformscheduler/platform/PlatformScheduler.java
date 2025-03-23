@@ -29,33 +29,43 @@ import java.util.concurrent.Future;
 
 public interface PlatformScheduler {
 
+    boolean isPrimaryThread();
+
+    boolean isGlobalTickThread();
+
+    boolean isOwnedByCurrentRegion(Entity entity);
+
+    boolean isOwnedByCurrentRegion(Location location);
+
+    boolean isOwnedByCurrentRegion(Location location, int squareRadiusChunks);
+
     void executeOrScheduleSync(Plugin plugin, Runnable task, Entity entity);
 
     void executeOrScheduleSync(Plugin plugin, Runnable task, Location location);
 
-    PlatformScheduledTask runTask(Plugin plugin, Runnable task, Entity entity);
+    PlatformScheduledTask<?> runTask(Plugin plugin, Runnable task, Entity entity);
 
-    PlatformScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay, Entity entity);
+    PlatformScheduledTask<?> runTaskLater(Plugin plugin, Runnable task, long delay, Entity entity);
 
-    PlatformScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Entity entity);
+    PlatformScheduledTask<?> runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Entity entity);
 
-    PlatformScheduledTask runTask(Plugin plugin, Runnable task, Location location);
+    PlatformScheduledTask<?> runTask(Plugin plugin, Runnable task, Location location);
 
-    PlatformScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay, Location location);
+    PlatformScheduledTask<?> runTaskLater(Plugin plugin, Runnable task, long delay, Location location);
 
-    PlatformScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Location location);
+    PlatformScheduledTask<?> runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Location location);
 
-    PlatformScheduledTask runTask(Plugin plugin, Runnable task);
+    PlatformScheduledTask<?> runTask(Plugin plugin, Runnable task);
 
-    PlatformScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay);
+    PlatformScheduledTask<?> runTaskLater(Plugin plugin, Runnable task, long delay);
 
-    PlatformScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period);
+    PlatformScheduledTask<?> runTaskTimer(Plugin plugin, Runnable task, long delay, long period);
 
-    PlatformScheduledTask runTaskAsynchronously(Plugin plugin, Runnable task);
+    PlatformScheduledTask<?> runTaskAsynchronously(Plugin plugin, Runnable task);
 
-    PlatformScheduledTask runTaskLaterAsynchronously(Plugin plugin, Runnable task, long delay);
+    PlatformScheduledTask<?> runTaskLaterAsynchronously(Plugin plugin, Runnable task, long delay);
 
-    PlatformScheduledTask runTaskTimerAsynchronously(Plugin plugin, Runnable task, long delay, long period);
+    PlatformScheduledTask<?> runTaskTimerAsynchronously(Plugin plugin, Runnable task, long delay, long period);
 
     <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Entity entity);
 

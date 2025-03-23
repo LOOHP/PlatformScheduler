@@ -27,9 +27,9 @@ import java.util.Objects;
 
 public class ScheduledTask {
 
-    private final PlatformScheduledTask platformScheduledTask;
+    private final PlatformScheduledTask<?> platformScheduledTask;
 
-    public ScheduledTask(PlatformScheduledTask platformScheduledTask) {
+    public ScheduledTask(PlatformScheduledTask<?> platformScheduledTask) {
         this.platformScheduledTask = platformScheduledTask;
     }
 
@@ -45,7 +45,7 @@ public class ScheduledTask {
         return platformScheduledTask.getOwner();
     }
 
-    public PlatformScheduledTask getPlatform() {
+    public PlatformScheduledTask<?> getPlatform() {
         return platformScheduledTask;
     }
 

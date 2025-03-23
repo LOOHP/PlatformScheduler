@@ -32,8 +32,33 @@ import java.util.concurrent.Future;
 public class BukkitScheduler implements PlatformScheduler {
 
     @Override
+    public boolean isPrimaryThread() {
+        return Bukkit.isPrimaryThread();
+    }
+
+    @Override
+    public boolean isGlobalTickThread() {
+        return isPrimaryThread();
+    }
+
+    @Override
+    public boolean isOwnedByCurrentRegion(Entity entity) {
+        return isPrimaryThread();
+    }
+
+    @Override
+    public boolean isOwnedByCurrentRegion(Location location) {
+        return isPrimaryThread();
+    }
+
+    @Override
+    public boolean isOwnedByCurrentRegion(Location location, int squareRadiusChunks) {
+        return isPrimaryThread();
+    }
+
+    @Override
     public void executeOrScheduleSync(Plugin plugin, Runnable task, Entity entity) {
-        if (Bukkit.isPrimaryThread()) {
+        if (isPrimaryThread()) {
             task.run();
         } else {
             Bukkit.getScheduler().runTask(plugin, task);
@@ -42,7 +67,7 @@ public class BukkitScheduler implements PlatformScheduler {
 
     @Override
     public void executeOrScheduleSync(Plugin plugin, Runnable task, Location location) {
-        if (Bukkit.isPrimaryThread()) {
+        if (isPrimaryThread()) {
             task.run();
         } else {
             Bukkit.getScheduler().runTask(plugin, task);

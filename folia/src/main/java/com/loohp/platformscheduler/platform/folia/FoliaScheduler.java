@@ -33,66 +33,105 @@ import java.util.concurrent.TimeUnit;
 
 public class FoliaScheduler implements PlatformScheduler {
 
+    @Override
+    public boolean isPrimaryThread() {
+        return false;
+    }
+
+    @Override
+    public boolean isGlobalTickThread() {
+        return Bukkit.isGlobalTickThread();
+    }
+
+    @Override
+    public boolean isOwnedByCurrentRegion(Entity entity) {
+        return Bukkit.isOwnedByCurrentRegion(entity);
+    }
+
+    @Override
+    public boolean isOwnedByCurrentRegion(Location location) {
+        return Bukkit.isOwnedByCurrentRegion(location);
+    }
+
+    @Override
+    public boolean isOwnedByCurrentRegion(Location location, int squareRadiusChunks) {
+        return Bukkit.isOwnedByCurrentRegion(location, squareRadiusChunks);
+    }
+
+    @Override
     public void executeOrScheduleSync(Plugin plugin, Runnable task, Entity entity) {
-        if (Bukkit.isOwnedByCurrentRegion(entity)) {
+        if (isOwnedByCurrentRegion(entity)) {
             task.run();
         } else {
             entity.getScheduler().run(plugin, st -> task.run(), null);
         }
     }
 
+    @Override
     public void executeOrScheduleSync(Plugin plugin, Runnable task, Location location) {
-        if (Bukkit.isOwnedByCurrentRegion(location)) {
+        if (isOwnedByCurrentRegion(location)) {
             task.run();
         } else {
             Bukkit.getRegionScheduler().execute(plugin, location, task);
         }
     }
 
+    @Override
     public FoliaScheduledTask runTask(Plugin plugin, Runnable task, Entity entity) {
         return new FoliaScheduledTask(entity.getScheduler().run(plugin, st -> task.run(), null));
     }
 
+    @Override
     public FoliaScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay, Entity entity) {
         return new FoliaScheduledTask(entity.getScheduler().runDelayed(plugin, st -> task.run(), null, delay));
     }
 
+    @Override
     public FoliaScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Entity entity) {
         return new FoliaScheduledTask(entity.getScheduler().runAtFixedRate(plugin, st -> task.run(), null, Math.max(1, delay), period));
     }
 
+    @Override
     public FoliaScheduledTask runTask(Plugin plugin, Runnable task, Location location) {
         return new FoliaScheduledTask(Bukkit.getRegionScheduler().run(plugin, location, st -> task.run()));
     }
 
+    @Override
     public FoliaScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay, Location location) {
         return new FoliaScheduledTask(Bukkit.getRegionScheduler().runDelayed(plugin, location, st -> task.run(), delay));
     }
 
+    @Override
     public FoliaScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Location location) {
         return new FoliaScheduledTask(Bukkit.getRegionScheduler().runAtFixedRate(plugin, location, st -> task.run(), Math.max(1, delay), period));
     }
 
+    @Override
     public FoliaScheduledTask runTask(Plugin plugin, Runnable task) {
         return new FoliaScheduledTask(Bukkit.getGlobalRegionScheduler().run(plugin, st -> task.run()));
     }
 
+    @Override
     public FoliaScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay) {
         return new FoliaScheduledTask(Bukkit.getGlobalRegionScheduler().runDelayed(plugin, st -> task.run(), delay));
     }
 
+    @Override
     public FoliaScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period) {
         return new FoliaScheduledTask(Bukkit.getGlobalRegionScheduler().runAtFixedRate(plugin, st -> task.run(), Math.max(1, delay), period));
     }
-    
+
+    @Override
     public FoliaScheduledTask runTaskAsynchronously(Plugin plugin, Runnable task) {
         return new FoliaScheduledTask(Bukkit.getAsyncScheduler().runNow(plugin, st -> task.run()));
     }
 
+    @Override
     public FoliaScheduledTask runTaskLaterAsynchronously(Plugin plugin, Runnable task, long delay) {
         return new FoliaScheduledTask(Bukkit.getAsyncScheduler().runDelayed(plugin, st -> task.run(), delay * 50, TimeUnit.MILLISECONDS));
     }
-    
+
+    @Override
     public FoliaScheduledTask runTaskTimerAsynchronously(Plugin plugin, Runnable task, long delay, long period) {
         return new FoliaScheduledTask(Bukkit.getAsyncScheduler().runAtFixedRate(plugin, st -> task.run(), Math.max(1, delay * 50), period * 50, TimeUnit.MILLISECONDS));
     }

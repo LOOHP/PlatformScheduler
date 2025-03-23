@@ -68,6 +68,26 @@ public class Scheduler {
         return platformScheduler;
     }
 
+    public static boolean isPrimaryThread() {
+        return platformScheduler.isPrimaryThread();
+    }
+
+    public static boolean isGlobalTickThread() {
+        return platformScheduler.isGlobalTickThread();
+    }
+
+    public static boolean isOwnedByCurrentRegion(Entity entity) {
+        return platformScheduler.isOwnedByCurrentRegion(entity);
+    }
+
+    public static boolean isOwnedByCurrentRegion(Location location) {
+        return platformScheduler.isOwnedByCurrentRegion(location);
+    }
+
+    public static boolean isOwnedByCurrentRegion(Location location, int squareRadiusChunks) {
+        return platformScheduler.isOwnedByCurrentRegion(location, squareRadiusChunks);
+    }
+
     public static void executeOrScheduleSync(Plugin plugin, Runnable task, Entity entity) {
         platformScheduler.executeOrScheduleSync(plugin, task, entity);
     }
