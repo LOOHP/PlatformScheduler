@@ -78,17 +78,32 @@ public class FoliaScheduler implements PlatformScheduler {
 
     @Override
     public FoliaScheduledTask runTask(Plugin plugin, Runnable task, Entity entity) {
-        return new FoliaScheduledTask(entity.getScheduler().run(plugin, st -> task.run(), null));
+        return runTask(plugin, task, null, entity);
     }
 
     @Override
     public FoliaScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay, Entity entity) {
-        return new FoliaScheduledTask(entity.getScheduler().runDelayed(plugin, st -> task.run(), null, delay));
+        return runTaskLater(plugin, task, null, delay, entity);
     }
 
     @Override
     public FoliaScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Entity entity) {
-        return new FoliaScheduledTask(entity.getScheduler().runAtFixedRate(plugin, st -> task.run(), null, Math.max(1, delay), period));
+        return runTaskTimer(plugin, task, null, delay, period, entity);
+    }
+
+    @Override
+    public FoliaScheduledTask runTask(Plugin plugin, Runnable task, Runnable retired, Entity entity) {
+        return new FoliaScheduledTask(entity.getScheduler().run(plugin, st -> task.run(), retired));
+    }
+
+    @Override
+    public FoliaScheduledTask runTaskLater(Plugin plugin, Runnable task, Runnable retired, long delay, Entity entity) {
+        return new FoliaScheduledTask(entity.getScheduler().runDelayed(plugin, st -> task.run(), retired, delay));
+    }
+
+    @Override
+    public FoliaScheduledTask runTaskTimer(Plugin plugin, Runnable task, Runnable retired, long delay, long period, Entity entity) {
+        return new FoliaScheduledTask(entity.getScheduler().runAtFixedRate(plugin, st -> task.run(), retired, Math.max(1, delay), period));
     }
 
     @Override
@@ -138,9 +153,15 @@ public class FoliaScheduler implements PlatformScheduler {
 
     @Override
     public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Entity entity) {
+        return callSyncMethod(plugin, task, task, entity);
+    }
+
+    @Override
+    public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Callable<T> retired, Entity entity) {
         CompletableFuture<T> future = new CompletableFuture<>();
         Runnable runnable = toFuture(future, task);
-        entity.getScheduler().run(plugin, st -> runnable.run(), runnable);
+        Runnable runnableRetired = toFuture(future, retired);
+        entity.getScheduler().run(plugin, st -> runnable.run(), runnableRetired);
         return future;
     }
 

@@ -90,6 +90,21 @@ public class BukkitScheduler implements PlatformScheduler {
     }
 
     @Override
+    public BukkitScheduledTask runTask(Plugin plugin, Runnable task, Runnable retired, Entity entity) {
+        return runTask(plugin, task, entity);
+    }
+
+    @Override
+    public BukkitScheduledTask runTaskLater(Plugin plugin, Runnable task, Runnable retired, long delay, Entity entity) {
+        return runTaskLater(plugin, task, delay, entity);
+    }
+
+    @Override
+    public BukkitScheduledTask runTaskTimer(Plugin plugin, Runnable task, Runnable retired, long delay, long period, Entity entity) {
+        return runTaskTimer(plugin, task, delay, period, entity);
+    }
+
+    @Override
     public BukkitScheduledTask runTask(Plugin plugin, Runnable task, Location location) {
         return new BukkitScheduledTask(Bukkit.getScheduler().runTask(plugin, task));
     }
@@ -137,6 +152,11 @@ public class BukkitScheduler implements PlatformScheduler {
     @Override
     public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Entity entity) {
         return Bukkit.getScheduler().callSyncMethod(plugin, task);
+    }
+
+    @Override
+    public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Callable<T> retired, Entity entity) {
+        return callSyncMethod(plugin, task, entity);
     }
 
     @Override

@@ -108,6 +108,18 @@ public class Scheduler {
         return new ScheduledTask(platformScheduler.runTaskTimer(plugin, task, delay, period, entity));
     }
 
+    public static ScheduledTask runTask(Plugin plugin, Runnable task, Runnable retired, Entity entity) {
+        return new ScheduledTask(platformScheduler.runTask(plugin, task, retired, entity));
+    }
+
+    public static ScheduledTask runTaskLater(Plugin plugin, Runnable task, Runnable retired, long delay, Entity entity) {
+        return new ScheduledTask(platformScheduler.runTaskLater(plugin, task, retired, delay, entity));
+    }
+
+    public static ScheduledTask runTaskTimer(Plugin plugin, Runnable task, Runnable retired, long delay, long period, Entity entity) {
+        return new ScheduledTask(platformScheduler.runTaskTimer(plugin, task, retired, delay, period, entity));
+    }
+
     public static ScheduledTask runTask(Plugin plugin, Runnable task, Location location) {
         return new ScheduledTask(platformScheduler.runTask(plugin, task, location));
     }
@@ -146,6 +158,10 @@ public class Scheduler {
     
     public static <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Entity entity) {
         return platformScheduler.callSyncMethod(plugin, task, entity);
+    }
+
+    public static <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Callable<T> retired, Entity entity) {
+        return platformScheduler.callSyncMethod(plugin, task, retired, entity);
     }
     
     public static <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Location location) {

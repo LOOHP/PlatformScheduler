@@ -49,6 +49,12 @@ public interface PlatformScheduler {
 
     PlatformScheduledTask<?> runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Entity entity);
 
+    PlatformScheduledTask<?> runTask(Plugin plugin, Runnable task, Runnable retired, Entity entity);
+
+    PlatformScheduledTask<?> runTaskLater(Plugin plugin, Runnable task, Runnable retired, long delay, Entity entity);
+
+    PlatformScheduledTask<?> runTaskTimer(Plugin plugin, Runnable task, Runnable retired, long delay, long period, Entity entity);
+
     PlatformScheduledTask<?> runTask(Plugin plugin, Runnable task, Location location);
 
     PlatformScheduledTask<?> runTaskLater(Plugin plugin, Runnable task, long delay, Location location);
@@ -68,6 +74,8 @@ public interface PlatformScheduler {
     PlatformScheduledTask<?> runTaskTimerAsynchronously(Plugin plugin, Runnable task, long delay, long period);
 
     <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Entity entity);
+
+    <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Callable<T> retired, Entity entity);
 
     <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Location location);
 
