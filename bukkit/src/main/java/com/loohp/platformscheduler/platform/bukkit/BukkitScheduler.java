@@ -20,9 +20,12 @@
 
 package com.loohp.platformscheduler.platform.bukkit;
 
+import com.loohp.platformscheduler.platform.PlatformScheduledTask;
 import com.loohp.platformscheduler.platform.PlatformScheduler;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 
@@ -52,71 +55,131 @@ public class BukkitScheduler implements PlatformScheduler {
     }
 
     @Override
+    public boolean isOwnedByCurrentRegion(Chunk chunk) {
+        return isPrimaryThread();
+    }
+
+    @Override
+    public boolean isOwnedByCurrentRegion(World world, int chunkX, int chunkZ) {
+        return isPrimaryThread();
+    }
+
+    @Override
     public boolean isOwnedByCurrentRegion(Location location, int squareRadiusChunks) {
         return isPrimaryThread();
     }
 
     @Override
-    public void executeOrScheduleSync(Plugin plugin, Runnable task, Entity entity) {
+    public boolean isOwnedByCurrentRegion(Chunk chunk, int squareRadiusChunks) {
+        return isPrimaryThread();
+    }
+
+    @Override
+    public boolean isOwnedByCurrentRegion(World world, int chunkX, int chunkZ, int squareRadiusChunks) {
+        return isPrimaryThread();
+    }
+
+    public void executeOrScheduleSync(Plugin plugin, Runnable task) {
         if (isPrimaryThread()) {
             task.run();
         } else {
             Bukkit.getScheduler().runTask(plugin, task);
         }
+    }
+
+    @Override
+    public void executeOrScheduleSync(Plugin plugin, Runnable task, Entity entity) {
+        executeOrScheduleSync(plugin, task);
     }
 
     @Override
     public void executeOrScheduleSync(Plugin plugin, Runnable task, Location location) {
-        if (isPrimaryThread()) {
-            task.run();
-        } else {
-            Bukkit.getScheduler().runTask(plugin, task);
-        }
+        executeOrScheduleSync(plugin, task);
+    }
+
+    @Override
+    public void executeOrScheduleSync(Plugin plugin, Runnable task, Chunk chunk) {
+        executeOrScheduleSync(plugin, task);
+    }
+
+    @Override
+    public void executeOrScheduleSync(Plugin plugin, Runnable task, World world, int chunkX, int chunkZ) {
+        executeOrScheduleSync(plugin, task);
     }
 
     @Override
     public BukkitScheduledTask runTask(Plugin plugin, Runnable task, Entity entity) {
-        return new BukkitScheduledTask(Bukkit.getScheduler().runTask(plugin, task));
+        return runTask(plugin, task);
     }
 
     @Override
     public BukkitScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay, Entity entity) {
-        return new BukkitScheduledTask(Bukkit.getScheduler().runTaskLater(plugin, task, delay));
+        return runTaskLater(plugin, task, delay);
     }
 
     @Override
     public BukkitScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Entity entity) {
-        return new BukkitScheduledTask(Bukkit.getScheduler().runTaskTimer(plugin, task, delay, period));
+        return runTaskTimer(plugin, task, delay, period);
     }
 
     @Override
     public BukkitScheduledTask runTask(Plugin plugin, Runnable task, Runnable retired, Entity entity) {
-        return runTask(plugin, task, entity);
+        return runTask(plugin, task);
     }
 
     @Override
     public BukkitScheduledTask runTaskLater(Plugin plugin, Runnable task, Runnable retired, long delay, Entity entity) {
-        return runTaskLater(plugin, task, delay, entity);
+        return runTaskLater(plugin, task, delay);
     }
 
     @Override
     public BukkitScheduledTask runTaskTimer(Plugin plugin, Runnable task, Runnable retired, long delay, long period, Entity entity) {
-        return runTaskTimer(plugin, task, delay, period, entity);
+        return runTaskTimer(plugin, task, delay, period);
     }
 
     @Override
     public BukkitScheduledTask runTask(Plugin plugin, Runnable task, Location location) {
-        return new BukkitScheduledTask(Bukkit.getScheduler().runTask(plugin, task));
+        return runTask(plugin, task);
     }
 
     @Override
     public BukkitScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay, Location location) {
-        return new BukkitScheduledTask(Bukkit.getScheduler().runTaskLater(plugin, task, delay));
+        return runTaskLater(plugin, task, delay);
     }
 
     @Override
     public BukkitScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Location location) {
-        return new BukkitScheduledTask(Bukkit.getScheduler().runTaskTimer(plugin, task, delay, period));
+        return runTaskTimer(plugin, task, delay, period);
+    }
+
+    @Override
+    public PlatformScheduledTask<?> runTask(Plugin plugin, Runnable task, Chunk chunk) {
+        return runTask(plugin, task);
+    }
+
+    @Override
+    public PlatformScheduledTask<?> runTaskLater(Plugin plugin, Runnable task, long delay, Chunk chunk) {
+        return runTaskLater(plugin, task, delay);
+    }
+
+    @Override
+    public PlatformScheduledTask<?> runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Chunk chunk) {
+        return runTaskTimer(plugin, task, delay, period);
+    }
+
+    @Override
+    public PlatformScheduledTask<?> runTask(Plugin plugin, Runnable task, World world, int chunkX, int chunkZ) {
+        return runTask(plugin, task);
+    }
+
+    @Override
+    public PlatformScheduledTask<?> runTaskLater(Plugin plugin, Runnable task, long delay, World world, int chunkX, int chunkZ) {
+        return runTaskLater(plugin, task, delay);
+    }
+
+    @Override
+    public PlatformScheduledTask<?> runTaskTimer(Plugin plugin, Runnable task, long delay, long period, World world, int chunkX, int chunkZ) {
+        return runTaskTimer(plugin, task, delay, period);
     }
 
     @Override
@@ -151,17 +214,27 @@ public class BukkitScheduler implements PlatformScheduler {
 
     @Override
     public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Entity entity) {
-        return Bukkit.getScheduler().callSyncMethod(plugin, task);
+        return callSyncMethod(plugin, task);
     }
 
     @Override
     public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Callable<T> retired, Entity entity) {
-        return callSyncMethod(plugin, task, entity);
+        return callSyncMethod(plugin, task);
     }
 
     @Override
     public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Location location) {
-        return Bukkit.getScheduler().callSyncMethod(plugin, task);
+        return callSyncMethod(plugin, task);
+    }
+
+    @Override
+    public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Chunk chunk) {
+        return callSyncMethod(plugin, task);
+    }
+
+    @Override
+    public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, World world, int chunkX, int chunkZ) {
+        return callSyncMethod(plugin, task);
     }
 
     @Override

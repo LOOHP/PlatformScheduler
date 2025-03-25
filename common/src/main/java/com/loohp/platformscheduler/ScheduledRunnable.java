@@ -20,7 +20,9 @@
 
 package com.loohp.platformscheduler;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 
@@ -66,6 +68,36 @@ public abstract class ScheduledRunnable implements Runnable {
     public synchronized ScheduledTask runTaskTimer(Plugin plugin, long delay, long period, Location location) {
         checkNotYetScheduled();
         return setupTask(Scheduler.runTaskTimer(plugin, this, delay, period, location));
+    }
+
+    public synchronized ScheduledTask runTask(Plugin plugin, Chunk chunk) {
+        checkNotYetScheduled();
+        return setupTask(Scheduler.runTask(plugin, this, chunk));
+    }
+
+    public synchronized ScheduledTask runTaskLater(Plugin plugin, long delay, Chunk chunk) {
+        checkNotYetScheduled();
+        return setupTask(Scheduler.runTaskLater(plugin, this, delay, chunk));
+    }
+
+    public synchronized ScheduledTask runTaskTimer(Plugin plugin, long delay, long period, Chunk chunk) {
+        checkNotYetScheduled();
+        return setupTask(Scheduler.runTaskTimer(plugin, this, delay, period, chunk));
+    }
+
+    public synchronized ScheduledTask runTask(Plugin plugin, World world, int chunkX, int chunkZ) {
+        checkNotYetScheduled();
+        return setupTask(Scheduler.runTask(plugin, this, world, chunkX, chunkZ));
+    }
+
+    public synchronized ScheduledTask runTaskLater(Plugin plugin, long delay, World world, int chunkX, int chunkZ) {
+        checkNotYetScheduled();
+        return setupTask(Scheduler.runTaskLater(plugin, this, delay, world, chunkX, chunkZ));
+    }
+
+    public synchronized ScheduledTask runTaskTimer(Plugin plugin, long delay, long period, World world, int chunkX, int chunkZ) {
+        checkNotYetScheduled();
+        return setupTask(Scheduler.runTaskTimer(plugin, this, delay, period, world, chunkX, chunkZ));
     }
 
     public synchronized ScheduledTask runTask(Plugin plugin) {

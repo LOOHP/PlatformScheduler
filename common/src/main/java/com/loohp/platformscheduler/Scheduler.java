@@ -25,7 +25,9 @@ import com.loohp.platformscheduler.platform.PlatformScheduler;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 
@@ -84,8 +86,24 @@ public class Scheduler {
         return platformScheduler.isOwnedByCurrentRegion(location);
     }
 
+    public static boolean isOwnedByCurrentRegion(Chunk chunk) {
+        return platformScheduler.isOwnedByCurrentRegion(chunk);
+    }
+
+    public static boolean isOwnedByCurrentRegion(World world, int chunkX, int chunkZ) {
+        return platformScheduler.isOwnedByCurrentRegion(world, chunkX, chunkZ);
+    }
+
     public static boolean isOwnedByCurrentRegion(Location location, int squareRadiusChunks) {
         return platformScheduler.isOwnedByCurrentRegion(location, squareRadiusChunks);
+    }
+
+    public static boolean isOwnedByCurrentRegion(Chunk chunk, int squareRadiusChunks) {
+        return platformScheduler.isOwnedByCurrentRegion(chunk, squareRadiusChunks);
+    }
+
+    public static boolean isOwnedByCurrentRegion(World world, int chunkX, int chunkZ, int squareRadiusChunks) {
+        return platformScheduler.isOwnedByCurrentRegion(world, chunkX, chunkZ, squareRadiusChunks);
     }
 
     public static void executeOrScheduleSync(Plugin plugin, Runnable task, Entity entity) {
@@ -94,6 +112,14 @@ public class Scheduler {
 
     public static void executeOrScheduleSync(Plugin plugin, Runnable task, Location location) {
         platformScheduler.executeOrScheduleSync(plugin, task, location);
+    }
+
+    public static void executeOrScheduleSync(Plugin plugin, Runnable task, Chunk chunk) {
+        platformScheduler.executeOrScheduleSync(plugin, task, chunk);
+    }
+
+    public static void executeOrScheduleSync(Plugin plugin, Runnable task, World world, int chunkX, int chunkZ) {
+        platformScheduler.executeOrScheduleSync(plugin, task, world, chunkX, chunkZ);
     }
 
     public static ScheduledTask runTask(Plugin plugin, Runnable task, Entity entity) {
@@ -132,6 +158,30 @@ public class Scheduler {
         return new ScheduledTask(platformScheduler.runTaskTimer(plugin, task, delay, period, location));
     }
 
+    public static ScheduledTask runTask(Plugin plugin, Runnable task, Chunk chunk) {
+        return new ScheduledTask(platformScheduler.runTask(plugin, task, chunk));
+    }
+
+    public static ScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay, Chunk chunk) {
+        return new ScheduledTask(platformScheduler.runTaskLater(plugin, task, delay, chunk));
+    }
+
+    public static ScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Chunk chunk) {
+        return new ScheduledTask(platformScheduler.runTaskTimer(plugin, task, delay, period, chunk));
+    }
+
+    public static ScheduledTask runTask(Plugin plugin, Runnable task, World world, int chunkX, int chunkZ) {
+        return new ScheduledTask(platformScheduler.runTask(plugin, task, world, chunkX, chunkZ));
+    }
+
+    public static ScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay, World world, int chunkX, int chunkZ) {
+        return new ScheduledTask(platformScheduler.runTaskLater(plugin, task, delay, world, chunkX, chunkZ));
+    }
+
+    public static ScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period, World world, int chunkX, int chunkZ) {
+        return new ScheduledTask(platformScheduler.runTaskTimer(plugin, task, delay, period, world, chunkX, chunkZ));
+    }
+
     public static ScheduledTask runTask(Plugin plugin, Runnable task) {
         return new ScheduledTask(platformScheduler.runTask(plugin, task));
     }
@@ -166,6 +216,14 @@ public class Scheduler {
     
     public static <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Location location) {
         return platformScheduler.callSyncMethod(plugin, task, location);
+    }
+
+    public static <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Chunk chunk) {
+        return platformScheduler.callSyncMethod(plugin, task, chunk);
+    }
+
+    public static <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, World world, int chunkX, int chunkZ) {
+        return platformScheduler.callSyncMethod(plugin, task, world, chunkX, chunkZ);
     }
     
     public static <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task) {

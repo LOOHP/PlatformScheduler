@@ -20,9 +20,12 @@
 
 package com.loohp.platformscheduler.platform.folia;
 
+import com.loohp.platformscheduler.platform.PlatformScheduledTask;
 import com.loohp.platformscheduler.platform.PlatformScheduler;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 
@@ -54,8 +57,28 @@ public class FoliaScheduler implements PlatformScheduler {
     }
 
     @Override
+    public boolean isOwnedByCurrentRegion(Chunk chunk) {
+        return isOwnedByCurrentRegion(chunk.getWorld(), chunk.getX(), chunk.getZ());
+    }
+
+    @Override
+    public boolean isOwnedByCurrentRegion(World world, int chunkX, int chunkZ) {
+        return Bukkit.isOwnedByCurrentRegion(world, chunkX, chunkZ);
+    }
+
+    @Override
     public boolean isOwnedByCurrentRegion(Location location, int squareRadiusChunks) {
         return Bukkit.isOwnedByCurrentRegion(location, squareRadiusChunks);
+    }
+
+    @Override
+    public boolean isOwnedByCurrentRegion(Chunk chunk, int squareRadiusChunks) {
+        return isOwnedByCurrentRegion(chunk.getWorld(), chunk.getX(), chunk.getZ(), squareRadiusChunks);
+    }
+
+    @Override
+    public boolean isOwnedByCurrentRegion(World world, int chunkX, int chunkZ, int squareRadiusChunks) {
+        return Bukkit.isOwnedByCurrentRegion(world, chunkX, chunkZ, squareRadiusChunks);
     }
 
     @Override
@@ -73,6 +96,20 @@ public class FoliaScheduler implements PlatformScheduler {
             task.run();
         } else {
             Bukkit.getRegionScheduler().execute(plugin, location, task);
+        }
+    }
+
+    @Override
+    public void executeOrScheduleSync(Plugin plugin, Runnable task, Chunk chunk) {
+        executeOrScheduleSync(plugin, task, chunk.getWorld(), chunk.getX(), chunk.getZ());
+    }
+
+    @Override
+    public void executeOrScheduleSync(Plugin plugin, Runnable task, World world, int chunkX, int chunkZ) {
+        if (isOwnedByCurrentRegion(world, chunkX, chunkZ)) {
+            task.run();
+        } else {
+            Bukkit.getRegionScheduler().execute(plugin, world, chunkX, chunkZ, task);
         }
     }
 
@@ -119,6 +156,36 @@ public class FoliaScheduler implements PlatformScheduler {
     @Override
     public FoliaScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Location location) {
         return new FoliaScheduledTask(Bukkit.getRegionScheduler().runAtFixedRate(plugin, location, st -> task.run(), Math.max(1, delay), period));
+    }
+
+    @Override
+    public PlatformScheduledTask<?> runTask(Plugin plugin, Runnable task, Chunk chunk) {
+        return runTask(plugin, task, chunk.getWorld(), chunk.getX(), chunk.getZ());
+    }
+
+    @Override
+    public PlatformScheduledTask<?> runTaskLater(Plugin plugin, Runnable task, long delay, Chunk chunk) {
+        return runTaskLater(plugin, task, delay, chunk.getWorld(), chunk.getX(), chunk.getZ());
+    }
+
+    @Override
+    public PlatformScheduledTask<?> runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Chunk chunk) {
+        return runTaskTimer(plugin, task, delay, period, chunk.getWorld(), chunk.getX(), chunk.getZ());
+    }
+
+    @Override
+    public PlatformScheduledTask<?> runTask(Plugin plugin, Runnable task, World world, int chunkX, int chunkZ) {
+        return new FoliaScheduledTask(Bukkit.getRegionScheduler().run(plugin, world, chunkX, chunkZ, st -> task.run()));
+    }
+
+    @Override
+    public PlatformScheduledTask<?> runTaskLater(Plugin plugin, Runnable task, long delay, World world, int chunkX, int chunkZ) {
+        return new FoliaScheduledTask(Bukkit.getRegionScheduler().runDelayed(plugin, world, chunkX, chunkZ, st -> task.run(), delay));
+    }
+
+    @Override
+    public PlatformScheduledTask<?> runTaskTimer(Plugin plugin, Runnable task, long delay, long period, World world, int chunkX, int chunkZ) {
+        return new FoliaScheduledTask(Bukkit.getRegionScheduler().runAtFixedRate(plugin, world, chunkX, chunkZ, st -> task.run(), Math.max(1, delay), period));
     }
 
     @Override
@@ -170,6 +237,19 @@ public class FoliaScheduler implements PlatformScheduler {
         CompletableFuture<T> future = new CompletableFuture<>();
         Runnable runnable = toFuture(future, task);
         Bukkit.getRegionScheduler().run(plugin, location, st -> runnable.run());
+        return future;
+    }
+
+    @Override
+    public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, Chunk chunk) {
+        return callSyncMethod(plugin, task, chunk.getWorld(), chunk.getX(), chunk.getZ());
+    }
+
+    @Override
+    public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task, World world, int chunkX, int chunkZ) {
+        CompletableFuture<T> future = new CompletableFuture<>();
+        Runnable runnable = toFuture(future, task);
+        Bukkit.getRegionScheduler().run(plugin, world, chunkX, chunkZ, st -> runnable.run());
         return future;
     }
 
