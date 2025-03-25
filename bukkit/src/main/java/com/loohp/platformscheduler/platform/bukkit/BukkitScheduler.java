@@ -79,6 +79,7 @@ public class BukkitScheduler implements PlatformScheduler {
         return isPrimaryThread();
     }
 
+    @Override
     public void executeOrScheduleSync(Plugin plugin, Runnable task) {
         if (isPrimaryThread()) {
             task.run();
@@ -89,6 +90,11 @@ public class BukkitScheduler implements PlatformScheduler {
 
     @Override
     public void executeOrScheduleSync(Plugin plugin, Runnable task, Entity entity) {
+        executeOrScheduleSync(plugin, task);
+    }
+
+    @Override
+    public void executeOrScheduleSync(Plugin plugin, Runnable task, Runnable retired, Entity entity) {
         executeOrScheduleSync(plugin, task);
     }
 

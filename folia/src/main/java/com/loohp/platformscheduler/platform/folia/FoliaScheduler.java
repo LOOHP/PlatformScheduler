@@ -82,11 +82,25 @@ public class FoliaScheduler implements PlatformScheduler {
     }
 
     @Override
+    public void executeOrScheduleSync(Plugin plugin, Runnable task) {
+        if (isGlobalTickThread()) {
+            task.run();
+        } else {
+            Bukkit.getGlobalRegionScheduler().run(plugin, st -> task.run());
+        }
+    }
+
+    @Override
     public void executeOrScheduleSync(Plugin plugin, Runnable task, Entity entity) {
+        executeOrScheduleSync(plugin, task, null, entity);
+    }
+
+    @Override
+    public void executeOrScheduleSync(Plugin plugin, Runnable task, Runnable retired, Entity entity) {
         if (isOwnedByCurrentRegion(entity)) {
             task.run();
         } else {
-            entity.getScheduler().run(plugin, st -> task.run(), null);
+            entity.getScheduler().run(plugin, st -> task.run(), retired);
         }
     }
 

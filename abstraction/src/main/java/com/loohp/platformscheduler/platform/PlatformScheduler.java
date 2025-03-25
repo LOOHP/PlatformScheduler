@@ -49,7 +49,11 @@ public interface PlatformScheduler {
 
     boolean isOwnedByCurrentRegion(World world, int chunkX, int chunkZ, int squareRadiusChunks);
 
+    void executeOrScheduleSync(Plugin plugin, Runnable task);
+
     void executeOrScheduleSync(Plugin plugin, Runnable task, Entity entity);
+
+    void executeOrScheduleSync(Plugin plugin, Runnable task, Runnable retired, Entity entity);
 
     void executeOrScheduleSync(Plugin plugin, Runnable task, Location location);
 

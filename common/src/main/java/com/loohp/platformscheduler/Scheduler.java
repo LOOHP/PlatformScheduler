@@ -106,8 +106,16 @@ public class Scheduler {
         return platformScheduler.isOwnedByCurrentRegion(world, chunkX, chunkZ, squareRadiusChunks);
     }
 
+    public static void executeOrScheduleSync(Plugin plugin, Runnable task) {
+        platformScheduler.executeOrScheduleSync(plugin, task);
+    }
+
     public static void executeOrScheduleSync(Plugin plugin, Runnable task, Entity entity) {
         platformScheduler.executeOrScheduleSync(plugin, task, entity);
+    }
+
+    public static void executeOrScheduleSync(Plugin plugin, Runnable task, Runnable retired, Entity entity) {
+        platformScheduler.executeOrScheduleSync(plugin, task, retired, entity);
     }
 
     public static void executeOrScheduleSync(Plugin plugin, Runnable task, Location location) {
