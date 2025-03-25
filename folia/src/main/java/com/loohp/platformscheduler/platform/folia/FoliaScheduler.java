@@ -20,7 +20,6 @@
 
 package com.loohp.platformscheduler.platform.folia;
 
-import com.loohp.platformscheduler.platform.PlatformScheduledTask;
 import com.loohp.platformscheduler.platform.PlatformScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -173,32 +172,32 @@ public class FoliaScheduler implements PlatformScheduler {
     }
 
     @Override
-    public PlatformScheduledTask<?> runTask(Plugin plugin, Runnable task, Chunk chunk) {
+    public FoliaScheduledTask runTask(Plugin plugin, Runnable task, Chunk chunk) {
         return runTask(plugin, task, chunk.getWorld(), chunk.getX(), chunk.getZ());
     }
 
     @Override
-    public PlatformScheduledTask<?> runTaskLater(Plugin plugin, Runnable task, long delay, Chunk chunk) {
+    public FoliaScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay, Chunk chunk) {
         return runTaskLater(plugin, task, delay, chunk.getWorld(), chunk.getX(), chunk.getZ());
     }
 
     @Override
-    public PlatformScheduledTask<?> runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Chunk chunk) {
+    public FoliaScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Chunk chunk) {
         return runTaskTimer(plugin, task, delay, period, chunk.getWorld(), chunk.getX(), chunk.getZ());
     }
 
     @Override
-    public PlatformScheduledTask<?> runTask(Plugin plugin, Runnable task, World world, int chunkX, int chunkZ) {
+    public FoliaScheduledTask runTask(Plugin plugin, Runnable task, World world, int chunkX, int chunkZ) {
         return new FoliaScheduledTask(Bukkit.getRegionScheduler().run(plugin, world, chunkX, chunkZ, st -> task.run()));
     }
 
     @Override
-    public PlatformScheduledTask<?> runTaskLater(Plugin plugin, Runnable task, long delay, World world, int chunkX, int chunkZ) {
+    public FoliaScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay, World world, int chunkX, int chunkZ) {
         return new FoliaScheduledTask(Bukkit.getRegionScheduler().runDelayed(plugin, world, chunkX, chunkZ, st -> task.run(), delay));
     }
 
     @Override
-    public PlatformScheduledTask<?> runTaskTimer(Plugin plugin, Runnable task, long delay, long period, World world, int chunkX, int chunkZ) {
+    public FoliaScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period, World world, int chunkX, int chunkZ) {
         return new FoliaScheduledTask(Bukkit.getRegionScheduler().runAtFixedRate(plugin, world, chunkX, chunkZ, st -> task.run(), Math.max(1, delay), period));
     }
 

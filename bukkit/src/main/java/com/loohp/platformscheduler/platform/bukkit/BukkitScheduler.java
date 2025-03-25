@@ -20,7 +20,6 @@
 
 package com.loohp.platformscheduler.platform.bukkit;
 
-import com.loohp.platformscheduler.platform.PlatformScheduledTask;
 import com.loohp.platformscheduler.platform.PlatformScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -159,32 +158,32 @@ public class BukkitScheduler implements PlatformScheduler {
     }
 
     @Override
-    public PlatformScheduledTask<?> runTask(Plugin plugin, Runnable task, Chunk chunk) {
+    public BukkitScheduledTask runTask(Plugin plugin, Runnable task, Chunk chunk) {
         return runTask(plugin, task);
     }
 
     @Override
-    public PlatformScheduledTask<?> runTaskLater(Plugin plugin, Runnable task, long delay, Chunk chunk) {
+    public BukkitScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay, Chunk chunk) {
         return runTaskLater(plugin, task, delay);
     }
 
     @Override
-    public PlatformScheduledTask<?> runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Chunk chunk) {
+    public BukkitScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period, Chunk chunk) {
         return runTaskTimer(plugin, task, delay, period);
     }
 
     @Override
-    public PlatformScheduledTask<?> runTask(Plugin plugin, Runnable task, World world, int chunkX, int chunkZ) {
+    public BukkitScheduledTask runTask(Plugin plugin, Runnable task, World world, int chunkX, int chunkZ) {
         return runTask(plugin, task);
     }
 
     @Override
-    public PlatformScheduledTask<?> runTaskLater(Plugin plugin, Runnable task, long delay, World world, int chunkX, int chunkZ) {
+    public BukkitScheduledTask runTaskLater(Plugin plugin, Runnable task, long delay, World world, int chunkX, int chunkZ) {
         return runTaskLater(plugin, task, delay);
     }
 
     @Override
-    public PlatformScheduledTask<?> runTaskTimer(Plugin plugin, Runnable task, long delay, long period, World world, int chunkX, int chunkZ) {
+    public BukkitScheduledTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period, World world, int chunkX, int chunkZ) {
         return runTaskTimer(plugin, task, delay, period);
     }
 
