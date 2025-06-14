@@ -21,7 +21,9 @@
 package com.loohp.platformscheduler.platform.bukkit;
 
 import com.loohp.platformscheduler.platform.PlatformScheduledTask;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Objects;
@@ -36,7 +38,9 @@ public class BukkitScheduledTask implements PlatformScheduledTask<BukkitTask> {
 
     @Override
     public boolean isCancelled() {
-        return task.isCancelled();
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        int taskId = task.getTaskId();
+        return !scheduler.isCurrentlyRunning(taskId) && !scheduler.isQueued(taskId);
     }
 
     @Override
